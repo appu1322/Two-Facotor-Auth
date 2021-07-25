@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %} home - 2FA {% endblock title %}
+
+{% block css %} 
+<style>
+
+@media screen and (min-width: 576px) { 
+  #exampleModal .modal-body img{
+    width: 300px;
+
+  }
+}
+
+@media screen and (max-width: 576px) { 
+  #exampleModal .modal-body img{
+    height: auto;
+    width: auto
+  }
+  #modal_button{
+    margin-top: 5px;
+  }
+}
+
+#modal_button img{
+  position: relative;
+    top: -13px;
+    z-index: 1;
+    right: 20px;
+}
+
+
+</style>
+{% endblock css %}
+
+{% block body %} 
+
+<!-- navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">TwoFactorAuth</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Services</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contact</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0 mr-1" type="submit">Search</button>
+        
+      </form>
+      {% if user.is_authenticated %}
+          <div class="btn-group mr-1">
+            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              welcome {{user.first_name}}
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" href="/logout">Logout</a> 
+            </div>
+          </div>
+      {% endif %}
+
+      {% if verifcation_active %}
+      <!-- Button trigger modal -->
+      <div id="modal_button">
+      <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal">
+        2-fa
+        </button>
+      <img src="/static/notify.png" alt="" width="25px">
+      </div>
+      {% endif %}
+    </div>
+</nav>
+
+  
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Two-Factor Authentication</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Scan the following QR code:
+          <div class="text-center">
+            <img src="/media/qr_code_images/myqr.png" alt="" srcset="">
+          </div>
+          Type an 2-fa code for verification: 
+          <div class="text-center bg-light pt-2 text-info">
+            <h1>{{ verification_code }}</h1>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancle</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- jumbotron -->
+<div class="container-fluid">
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="display-4">Two-factor authorization</h1>
+      <p class="lead">home page of two-factor authorization using QR code.</p>
+    </div>
+  </div>
+</div>
+
+{% endblock body %}

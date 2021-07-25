@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block css %}
+
+<style>
+    #sub_head1{
+        font-size: larger;
+    }
+
+    #sub_head2{
+        font-weight: bolder;
+    }
+
+    #accordionExample .card-header .btn-link{
+        font-size: 22px;
+    }
+
+    #accordionExample .card #collapseOne .card-body{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+{% endblock css %}
+
+{% block body %}
+
+<div class="container pb-5 mb-5" id="two_fa_session">
+
+    <h2 class="my-3">Two-Factor Authentication</h2>
+    <hr>
+    <p id="sub_head1">Two-factor authentication increase the security of your account</p>
+    <p id="sub_head2">All you need is a compattible app on your smartphone, for Examples:-</p>
+    <ul>
+        <li><span class="text-info pb-0">Sacn your QR Code</span></li>
+        <li><span class="text-info pb-0">Enter your Code</span></li>
+    </ul>
+
+    <div class="accordion" id="accordionExample">
+        <!-- card-1 -->
+        <div class="card">
+            <div class="card-header" id="headingOne">
+              <h4 class="mb-0">
+                <button class="btn btn-link btn-block text-left text-decoration-none text-dark" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Sacn your QR Code
+                </button>
+              </h2>
+            </div>
+
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">   
+                    <img class="" src="/static/qrcode_img.jpg" alt="" srcset="" width="350px">
+                    {% if camera %}
+                    <form class="form-signin" method="post" action="/verification-for-two-factor-Authenticaton-verification/"> {% csrf_token %}
+                        <input type="hidden" name="input_string" value="scan_code">
+                        <input type="hidden" name="username" value={{username}}>
+                        <input type="hidden" name="password" value={{password}}>
+                        <button class="btn btn-primary mt-3">Scan code</button>
+                    </form>
+                    {% else %}
+                    <button class="btn btn-primary mt-3" disabled>Scan code</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- card-2 -->
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left collapsed text-decoration-none text-dark" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Enter Your Code
+                </button>
+              </h2>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2 text-center font-weight-bold py-3">
+                            <label for="verify_code">Enter Code</label> 
+                        </div> 
+                        <div class="col-md-4 px-0 py-1">
+                            <form class="form-signin" method="post" action="/verification-for-two-factor-Authenticaton-verification/"> {% csrf_token %}
+                                <input class="form-control" type="text" name="verify_code" id="verify_code">
+                        </div>
+                        <div class="col-md-2 text-center py-1">
+                            <input type="hidden" name="input_string" value="verify_code">
+                            <input type="hidden" name="username" value={{username}}>
+                            <input type="hidden" name="password" value={{password}}>
+                            <button class="btn btn-primary">Verify</button>
+                        </div>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div> -->
+
+    <!-- resend code -->
+    <div class="my-3 d-inline" id="resend_code"> 
+        <form class="form-signin d-inline" method="post" action="/two-factor-Authenticaton-verification/"> {% csrf_token %}   
+            <input type="hidden" name="input_string" value="resend_code">
+            <input type="hidden" name="username" value={{username}}>
+            <input type="hidden" name="password" value={{password}}>
+            <button type="submit" class="btn btn-outline-light text-info font-weight-bold px-0">
+                <svg width="2em" height="2em" viewBox="0 0 16 16" class="text-info bi bi-arrow-repeat" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+                    <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+                </svg>
+                Send me New Code
+            </button>
+        </form>
+    </div>
+
+    <!-- modal togger -->
+    <div class="my-2 d-inline float-right">
+        <a href="" class="text-decoration-none text-dark font-weight-bold" data-toggle="modal" data-target="#exampleModal">How to get code ?</a>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">How to get code?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <span class="font-weight-bold">
+                    Step 1:- 
+                </span>
+                <span>
+                    Click on 2fa button
+                </span>
+                <div class="text-center my-1">
+                    <img src="/static/modal_img.png" alt="" width="200px">
+                </div>
+                <span class="font-weight-bold">
+                    Step 2:- 
+                </span>
+                <span>
+                    Scan verification code
+                </span>
+                <div class="text-center my-1">
+                    <img src="/static/modal_img_1.png" alt="" width="200px">
+                    <h4>OR</h4>
+                </div>
+                <span class="font-weight-bold">
+                    Step 2:- 
+                </span>
+                <span>
+                    Enter verification code
+                </span>
+                <div class="text-center my-1">
+                    <img src="/static/modal_img_2.png" alt="" width="200px">
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </div>
+    </div>
+  
+</div>
+
+{% endblock body %}
